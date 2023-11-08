@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+	<changeSet id="1" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE STOCKS (
+			ID SERIAL PRIMARY KEY,
+			TICKER VARCHAR(255),
+			COMPANY VARCHAR(255),
+			SECTOR VARCHAR(255),
+			INDUSTRY VARCHAR(255),
+			COUNTRY VARCHAR(255),
+			MARKET_CAP VARCHAR(255),
+			PRICE_EARNINGS VARCHAR(255),
+			PRICE VARCHAR(255),
+			CHANGE VARCHAR(255),
+			VOLUME VARCHAR(255),
+			CREATED_DATE DATE NOT NULL,
+			MODIFIED_DATE DATE
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE STOCKS;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="2" author="trentsteel777">
+		<sql>
+			INSERT INTO STOCKS (TICKER, COMPANY, SECTOR, INDUSTRY, COUNTRY, MARKET_CAP, PRICE_EARNINGS, PRICE, CHANGE, VOLUME, CREATED_DATE) 
+				VALUES ('TEST', 'Test Inc.', 'Technology', 'Consumer Electronics', 'United States', '2.5T', '30.45', '150.25', '+2.50', '10,000,000', CURRENT_DATE);
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM STOCKS WHERE TICKER='TEST';
+			</sql>
+		</rollback>
+	</changeSet>
+
+
+</databaseChangeLog>
