@@ -10,5 +10,8 @@
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
 	<include file="changelogs/20231108_stocks_table.xml"/>
+	<include file="changelogs/20231109_option_table.xml"/>
+	<include file="changelogs/20231109_portfolio_table.xml"/>
+	<include file="changelogs/20231109_transaction_history_table.xml"/>
 
 </databaseChangeLog>

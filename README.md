@@ -24,6 +24,7 @@ Postgres:
 
 
 sql:
+	SELECT pg_sequence_last_value('public.option_types_id_seq'); -- last value of sequence
 	select * from stocks;	
 	
 list schemas:

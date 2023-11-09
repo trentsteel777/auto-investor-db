@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+	<changeSet id="3" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE OPTION_TYPES (
+				ID SERIAL PRIMARY KEY,
+			    NAME VARCHAR(255) NOT NULL
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE OPTION_TYPES;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="4" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			ALTER SEQUENCE option_types_id_seq MINVALUE 0 START 0 RESTART WITH 0;
+		</sql>
+		<rollback>
+			<sql>
+				ALTER SEQUENCE option_types_id_seq MINVALUE 1 START 1 RESTART WITH 1;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="5" author="trentsteel777">
+		<sql>
+			INSERT INTO OPTION_TYPES (NAME) VALUES ('CALL');
+			INSERT INTO OPTION_TYPES (NAME) VALUES ('PUT');
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM OPTION_TYPES WHERE NAME='CALL';
+				DELETE FROM OPTION_TYPES WHERE NAME='PUT';
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<!-- https://stackoverflow.com/questions/15726535/which-datatype-should-be-used-for-currency -->
+	<changeSet id="6" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE OPTIONS (
+				ID BIGSERIAL PRIMARY KEY,
+				SYMBOL VARCHAR(255) NOT NULL,
+				OPTION_TYPE_ID INT NOT NULL,
+			    CONTRACT_SYMBOL VARCHAR(255) NOT NULL,
+			    STRIKE NUMERIC(15,4) NOT NULL,
+			    CURRENCY VARCHAR(255) NOT NULL,
+			    LAST_PRICE NUMERIC(15,4) NOT NULL,
+			    CHANGE NUMERIC(15,4) NOT NULL,
+			    PERCENT_CHANGE NUMERIC(15,4) NOT NULL,
+			    VOLUME INT NOT NULL,
+			    OPEN_INTEREST INT NOT NULL,
+			    BID NUMERIC(15,4) NOT NULL,
+			    ASK NUMERIC(15,4) NOT NULL,
+			    CONTRACT_SIZE VARCHAR(255) NOT NULL,
+			    EXPIRATION DATE NOT NULL,
+			    LAST_TRADE_DATE TIMESTAMP NOT NULL,
+			    IMPLIED_VOLATILITY NUMERIC(15,4) NOT NULL,
+			    IN_THE_MONEY BOOLEAN NOT NULL,
+			    CREATED_DATE DATE NOT NULL,
+			    FOREIGN KEY (OPTION_TYPE_ID) REFERENCES OPTION_TYPES(ID)
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE OPTIONS;
+			</sql>
+		</rollback>
+	</changeSet>
+
+
+</databaseChangeLog>

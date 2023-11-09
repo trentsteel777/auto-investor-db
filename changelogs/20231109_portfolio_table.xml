@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+	<changeSet id="7" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE ACCOUNTS (
+			    ID SERIAL PRIMARY KEY,
+			    ACCOUNT_NUMBER VARCHAR(10) NOT NULL,
+			    CREATED_DATE DATE NOT NULL,
+			    MODIFIED_DATE DATE
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE ACCOUNTS;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="8" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE POSITIONS (
+			    ID SERIAL PRIMARY KEY,
+			    ACCOUNT_NUMBER_ID SERIAL NOT NULL,
+				OPTION_ID BIGSERIAL NOT NULL,
+			    QUANTITY INT NOT NULL,
+			    CREATED_DATE DATE NOT NULL,
+			    MODIFIED_DATE DATE,
+			    FOREIGN KEY (ACCOUNT_NUMBER_ID) REFERENCES ACCOUNTS(ID),
+			    FOREIGN KEY (OPTION_ID) REFERENCES OPTIONS(ID)
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE POSITIONS;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="9" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE CASH_POSITIONS (
+			    ID SERIAL PRIMARY KEY,
+			    ACCOUNT_NUMBER_ID SERIAL NOT NULL,
+			    CURRENCY VARCHAR(10),
+			    AMOUNT DECIMAL(10, 2) NOT NULL,
+			    CREATED_DATE DATE NOT NULL,
+			    MODIFIED_DATE DATE,
+			    FOREIGN KEY (ACCOUNT_NUMBER_ID) REFERENCES ACCOUNTS(ID)
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE CASH_POSITIONS;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="10" author="trentsteel777">
+		<sql>
+			INSERT INTO ACCOUNTS (ID, ACCOUNT_NUMBER, CREATED_DATE, MODIFIED_DATE)
+				VALUES (1, '0000000001', CURRENT_DATE, NULL);
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM ACCOUNTS WHERE ID='1';
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="11" author="trentsteel777">
+		<sql>
+			INSERT INTO CASH_POSITIONS (ID, ACCOUNT_NUMBER_ID, CURRENCY, AMOUNT, CREATED_DATE, MODIFIED_DATE)
+				VALUES (1,1,'USD',100000.00,CURRENT_DATE,NULL);
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM CASH_POSITIONS WHERE ID='1';
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="12" author="trentsteel777">
+		<sql>
+			INSERT INTO OPTIONS (SYMBOL, OPTION_TYPE_ID, CONTRACT_SYMBOL, STRIKE, CURRENCY, LAST_PRICE, CHANGE, PERCENT_CHANGE, VOLUME, OPEN_INTEREST, BID, ASK, CONTRACT_SIZE, EXPIRATION, LAST_TRADE_DATE, IMPLIED_VOLATILITY, IN_THE_MONEY, CREATED_DATE)
+				VALUES ('TEST', 0, 'AAPL202301C150', 150.0, 'USD', 10.5, 1.2, 12.0, 500, 1000, 10.2, 11.0, '100', '2023-01-15', '2023-11-06 14:30:00', 0.25, true, '2023-11-06');
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM OPTIONS WHERE SYMBOL='TEST';
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="13" author="trentsteel777">
+		<sql>
+			INSERT INTO POSITIONS (ACCOUNT_NUMBER_ID, OPTION_ID, QUANTITY, CREATED_DATE, MODIFIED_DATE)
+				VALUES (1, (SELECT ID FROM OPTIONS WHERE CONTRACT_SYMBOL = 'AAPL202301C150'), 10, CURRENT_DATE, NULL);
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM POSITIONS WHERE ACCOUNT_NUMBER_ID='1';
+			</sql>
+		</rollback>
+	</changeSet>
+
+
+</databaseChangeLog>

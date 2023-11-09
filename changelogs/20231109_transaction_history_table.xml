@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
+        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+        http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
+
+	<changeSet id="14" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE TRANSACTION_TYPES (
+			    ID SERIAL PRIMARY KEY,
+			    NAME VARCHAR(255) NOT NULL
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE TRANSACTION_TYPES;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="15" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			ALTER SEQUENCE transaction_types_id_seq MINVALUE 0 START 0 RESTART WITH 0;
+		</sql>
+		<rollback>
+			<sql>
+				ALTER SEQUENCE transaction_types_id_seq MINVALUE 1 START 1 RESTART WITH 1;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="16" author="trentsteel777">
+		<sql>
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_SHORT_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_LONG_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_SHORT_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_LONG_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_SHORT_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_LONG_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_SHORT_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_LONG_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CASH_DEPOSIT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CASH_WITHDRAWAL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('COMMISSION');
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM TRANSACTION_TYPES WHERE NAME IN 
+					('OPEN_SHORT_CALL', 'OPEN_LONG_CALL', 'OPEN_SHORT_PUT', 'OPEN_LONG_PUT', 'CLOSE_SHORT_CALL', 'CLOSE_LONG_CALL', 'CLOSE_SHORT_PUT','CLOSE_LONG_PUT', 'CASH_DEPOSIT', 'CASH_WITHDRAWAL', 'COMMISSION');
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="17" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE TRANSACTION_HISTORY (
+			    ID SERIAL PRIMARY KEY,
+			    ACCOUNT_NUMBER_ID BIGINT NOT NULL,
+			    TRANSACTION_DATETIME TIMESTAMP NOT NULL,
+			    TRANSACTION_TYPE_ID BIGINT NOT NULL,
+			    AMOUNT NUMERIC(15,4) NOT NULL,
+			    DESCRIPTION VARCHAR(255),
+			    CREATED_DATE DATE NOT NULL,
+			    MODIFIED_DATE DATE,
+			    FOREIGN KEY (ACCOUNT_NUMBER_ID) REFERENCES ACCOUNTS(ID),
+			    FOREIGN KEY (TRANSACTION_TYPE_ID) REFERENCES TRANSACTION_TYPES(ID)
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE TRANSACTION_HISTORY;
+			</sql>
+		</rollback>
+	</changeSet>
+	
+	<changeSet id="18" author="trentsteel777">
+		<sql>
+			INSERT INTO TRANSACTION_HISTORY (ACCOUNT_NUMBER_ID, TRANSACTION_DATETIME, TRANSACTION_TYPE_ID, AMOUNT, DESCRIPTION, CREATED_DATE)
+				VALUES (1, CURRENT_TIMESTAMP, 2, 100000.00, 'Initial deposit of $100,000', CURRENT_DATE);
+		</sql>
+		<rollback>
+			<sql>
+				DELETE FROM TRANSACTION_HISTORY WHERE ACCOUNT_NUMBER_ID='1'; 
+			</sql>
+		</rollback>
+	</changeSet>
+	
+</databaseChangeLog>
