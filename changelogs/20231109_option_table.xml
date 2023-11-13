@@ -9,21 +9,21 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-	<changeSet id="3" author="trentsteel777">
-		<createTable tableName="OPTION_TYPES">
-			<column name="ID" type="SERIAL">
-				<constraints primaryKey="true"/>
-			</column>
-			<column name="NAME" type="VARCHAR(255)">
-				<constraints nullable="false"/>
-			</column>
-		</createTable>
+	<changeSet id="3" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE OPTION_TYPES (
+				ID SERIAL PRIMARY KEY,
+			    NAME VARCHAR(255) NOT NULL
+			);
+		</sql>
 		<rollback>
-			<dropTable tableName="OPTION_TYPES"/>
+			<sql>
+				DROP TABLE OPTION_TYPES;
+			</sql>
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="4" author="trentsteel777">
+	<changeSet id="4" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			ALTER SEQUENCE option_types_id_seq MINVALUE 0 START 0 RESTART WITH 0;
 		</sql>
@@ -35,82 +35,50 @@
 	</changeSet>
 	
 	<changeSet id="5" author="trentsteel777">
-		<insert tableName="OPTION_TYPES">
-			<column name="NAME" value="CALL"/>
-		</insert>
-		<insert tableName="OPTION_TYPES">
-			<column name="NAME" value="PUT"/>
-		</insert>
+		<sql>
+			INSERT INTO OPTION_TYPES (NAME) VALUES ('CALL');
+			INSERT INTO OPTION_TYPES (NAME) VALUES ('PUT');
+		</sql>
 		<rollback>
-			<delete tableName="OPTION_TYPES">
-				<where> NAME='CALL' OR NAME='PUT' </where>
-			</delete>
+			<sql>
+				DELETE FROM OPTION_TYPES WHERE NAME='CALL';
+				DELETE FROM OPTION_TYPES WHERE NAME='PUT';
+			</sql>
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="6" author="trentsteel777">
-		<createTable tableName="OPTIONS">
-			<column name="ID" type="BIGSERIAL">
-				<constraints primaryKey="true"/>
-			</column>
-			<column name="SYMBOL" type="VARCHAR(255)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="OPTION_TYPE_ID" type="INT">
-			    <constraints  foreignKeyName="OPTIONS_OPTION_TYPE_ID_FK" referencedTableName="OPTION_TYPES" referencedColumnNames="ID" nullable="false"/> 
-			</column>
-			<column name="CONTRACT_SYMBOL" type="VARCHAR(255)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="STRIKE" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="CURRENCY" type="VARCHAR(255)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="LAST_PRICE" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="CHANGE" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="PERCENT_CHANGE" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="VOLUME" type="INT">
-				<constraints nullable="false"/>
-			</column>
-			<column name="OPEN_INTEREST" type="INT">
-				<constraints nullable="false"/>
-			</column>
-			<column name="BID" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="ASK" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="CONTRACT_SIZE" type="VARCHAR(255)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="EXPIRATION" type="DATE">
-				<constraints nullable="false"/>
-			</column>
-			<column name="LAST_TRADE_DATE" type="TIMESTAMP">
-				<constraints nullable="false"/>
-			</column>
-			<column name="IMPLIED_VOLATILITY" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="IN_THE_MONEY" type="BOOLEAN">
-				<constraints nullable="false"/>
-			</column>
-			<column name="CREATED_DATE" type="DATE">
-				<constraints nullable="false"/>
-			</column>
-		</createTable>
+	<!-- https://stackoverflow.com/questions/15726535/which-datatype-should-be-used-for-currency -->
+	<changeSet id="6" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE OPTIONS (
+				ID BIGSERIAL PRIMARY KEY,
+				SYMBOL VARCHAR(255) NOT NULL,
+				OPTION_TYPE_ID INT NOT NULL,
+			    CONTRACT_SYMBOL VARCHAR(255) NOT NULL,
+			    STRIKE NUMERIC(15,4) NOT NULL,
+			    CURRENCY VARCHAR(255) NOT NULL,
+			    LAST_PRICE NUMERIC(15,4) NOT NULL,
+			    CHANGE NUMERIC(15,4) NOT NULL,
+			    PERCENT_CHANGE NUMERIC(15,4) NOT NULL,
+			    VOLUME INT NOT NULL,
+			    OPEN_INTEREST INT NOT NULL,
+			    BID NUMERIC(15,4) NOT NULL,
+			    ASK NUMERIC(15,4) NOT NULL,
+			    CONTRACT_SIZE VARCHAR(255) NOT NULL,
+			    EXPIRATION DATE NOT NULL,
+			    LAST_TRADE_DATE TIMESTAMP NOT NULL,
+			    IMPLIED_VOLATILITY NUMERIC(15,4) NOT NULL,
+			    IN_THE_MONEY BOOLEAN NOT NULL,
+			    CREATED_DATE DATE NOT NULL,
+			    FOREIGN KEY (OPTION_TYPE_ID) REFERENCES OPTION_TYPES(ID)
+			);
+		</sql>
 		<rollback>
-			<dropTable tableName="OPTIONS"/>
+			<sql>
+				DROP TABLE OPTIONS;
+			</sql>
 		</rollback>
 	</changeSet>
+
 
 </databaseChangeLog>

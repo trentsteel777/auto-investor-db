@@ -9,21 +9,21 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-<changeSet id="14" author="trentsteel777">
-		<createTable tableName="TRANSACTION_TYPES">
-			<column name="ID" type="SERIAL">
-				<constraints primaryKey="true"/>
-			</column>
-			<column name="NAME" type="VARCHAR(255)">
-				<constraints nullable="false"/>
-			</column>
-		</createTable>
+	<changeSet id="14" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE TRANSACTION_TYPES (
+			    ID SERIAL PRIMARY KEY,
+			    NAME VARCHAR(255) NOT NULL
+			);
+		</sql>
 		<rollback>
-			<dropTable tableName="TRANSACTION_TYPES"/>
+			<sql>
+				DROP TABLE TRANSACTION_TYPES;
+			</sql>
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="15" author="trentsteel777">
+	<changeSet id="15" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			ALTER SEQUENCE transaction_types_id_seq MINVALUE 0 START 0 RESTART WITH 0;
 		</sql>
@@ -35,102 +35,58 @@
 	</changeSet>
 	
 	<changeSet id="16" author="trentsteel777">
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="1"/>
-			<column name="NAME" value="OPEN_SHORT_CALL"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="2"/>
-			<column name="NAME" value="OPEN_LONG_CALL"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="3"/>
-			<column name="NAME" value="OPEN_SHORT_PUT"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="4"/>
-			<column name="NAME" value="OPEN_LONG_PUT"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="5"/>
-			<column name="NAME" value="CLOSE_SHORT_CALL"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="6"/>
-			<column name="NAME" value="CLOSE_LONG_CALL"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="7"/>
-			<column name="NAME" value="CLOSE_SHORT_PUT"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="8"/>
-			<column name="NAME" value="CLOSE_LONG_PUT"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="9"/>
-			<column name="NAME" value="CASH_DEPOSIT"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="10"/>
-			<column name="NAME" value="CASH_WITHDRAWAL"/>
-		</insert>
-		<insert tableName="TRANSACTION_TYPES">
-			<column name="ID" valueNumeric="11"/>
-			<column name="NAME" value="COMMISSION"/>
-		</insert>
+		<sql>
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_SHORT_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_LONG_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_SHORT_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_LONG_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_SHORT_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_LONG_CALL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_SHORT_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CLOSE_LONG_PUT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CASH_DEPOSIT');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('CASH_WITHDRAWAL');
+			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('COMMISSION');
+		</sql>
 		<rollback>
-			<delete tableName="TRANSACTION_TYPES">
-				<where> NAME IN ('OPEN_SHORT_CALL', 'OPEN_LONG_CALL', 'OPEN_SHORT_PUT', 'OPEN_LONG_PUT', 'CLOSE_SHORT_CALL', 'CLOSE_LONG_CALL', 'CLOSE_SHORT_PUT','CLOSE_LONG_PUT', 'CASH_DEPOSIT', 'CASH_WITHDRAWAL', 'COMMISSION') </where>
-			</delete>
+			<sql>
+				DELETE FROM TRANSACTION_TYPES WHERE NAME IN 
+					('OPEN_SHORT_CALL', 'OPEN_LONG_CALL', 'OPEN_SHORT_PUT', 'OPEN_LONG_PUT', 'CLOSE_SHORT_CALL', 'CLOSE_LONG_CALL', 'CLOSE_SHORT_PUT','CLOSE_LONG_PUT', 'CASH_DEPOSIT', 'CASH_WITHDRAWAL', 'COMMISSION');
+			</sql>
 		</rollback>
 	</changeSet>
 
-	<changeSet id="17" author="trentsteel777">
-		<createTable tableName="TRANSACTION_HISTORY">
-			<column name="ID" type="SERIAL">
-				<constraints primaryKey="true"/>
-			</column>
-			<column name="ACCOUNT_NUMBER_ID" type="BIGINT">
-				<constraints foreignKeyName="TRANSACTION_HISTORY_ACCOUNT_NUMBER_ID_FK" referencedTableName="ACCOUNTS" referencedColumnNames="ID" nullable="false"/>
-			</column>
-			<column name="TRANSACTION_DATETIME" type="TIMESTAMP">
-				<constraints nullable="false"/>
-			</column>
-			<column name="TRANSACTION_TYPE_ID" type="BIGINT">
-				<constraints foreignKeyName="TRANSACTION_HISTORY_TRANSACTION_TYPE_ID_FK" referencedTableName="TRANSACTION_TYPES" referencedColumnNames="ID" nullable="false"/>
-			</column>
-			<column name="AMOUNT" type="NUMERIC(15,4)">
-				<constraints nullable="false"/>
-			</column>
-			<column name="DESCRIPTION" type="VARCHAR(255)">
-				<constraints nullable="true"/>
-			</column>
-			<column name="CREATED_DATE" type="DATE">
-				<constraints nullable="false"/>
-			</column>
-			<column name="MODIFIED_DATE" type="DATE"/>
-		</createTable>
+	<changeSet id="17" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE TRANSACTION_HISTORY (
+			    ID SERIAL PRIMARY KEY,
+			    ACCOUNT_NUMBER_ID BIGINT NOT NULL,
+			    TRANSACTION_DATETIME TIMESTAMP NOT NULL,
+			    TRANSACTION_TYPE_ID BIGINT NOT NULL,
+			    AMOUNT NUMERIC(15,4) NOT NULL,
+			    DESCRIPTION VARCHAR(255),
+			    CREATED_DATE DATE NOT NULL,
+			    MODIFIED_DATE DATE,
+			    FOREIGN KEY (ACCOUNT_NUMBER_ID) REFERENCES ACCOUNTS(ID),
+			    FOREIGN KEY (TRANSACTION_TYPE_ID) REFERENCES TRANSACTION_TYPES(ID)
+			);
+		</sql>
 		<rollback>
-			<dropTable tableName="TRANSACTION_HISTORY"/>
+			<sql>
+				DROP TABLE TRANSACTION_HISTORY;
+			</sql>
 		</rollback>
 	</changeSet>
 	
 	<changeSet id="18" author="trentsteel777">
-		<insert tableName="TRANSACTION_HISTORY">
-			<column name="ID" valueNumeric="1"/>
-			<column name="ACCOUNT_NUMBER_ID" valueNumeric="1"/>
-			<column name="TRANSACTION_DATETIME" valueDate="CURRENT_TIMESTAMP"/>
-			<column name="TRANSACTION_TYPE_ID" valueNumeric="2"/>
-			<column name="AMOUNT" valueNumeric="100000.00"/>
-			<column name="DESCRIPTION" value="Initial deposit of $100,000"/>
-			<column name="CREATED_DATE" valueDate="CURRENT_DATE"/>
-			<column name="MODIFIED_DATE"/>
-		</insert>
+		<sql>
+			INSERT INTO TRANSACTION_HISTORY (ACCOUNT_NUMBER_ID, TRANSACTION_DATETIME, TRANSACTION_TYPE_ID, AMOUNT, DESCRIPTION, CREATED_DATE)
+				VALUES (1, CURRENT_TIMESTAMP, 2, 100000.00, 'Initial deposit of $100,000', CURRENT_DATE);
+		</sql>
 		<rollback>
-			<delete tableName="TRANSACTION_HISTORY">
-				<where> ACCOUNT_NUMBER_ID='1' </where>
-			</delete>
+			<sql>
+				DELETE FROM TRANSACTION_HISTORY WHERE ACCOUNT_NUMBER_ID='1'; 
+			</sql>
 		</rollback>
 	</changeSet>
 	
