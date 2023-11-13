@@ -10,41 +10,51 @@
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
 	<changeSet id="1" author="trentsteel777" >
-		<sql dbms="postgresql" splitStatements="false">
-			CREATE TABLE STOCKS (
-			ID SERIAL PRIMARY KEY,
-			TICKER VARCHAR(255),
-			COMPANY VARCHAR(255),
-			SECTOR VARCHAR(255),
-			INDUSTRY VARCHAR(255),
-			COUNTRY VARCHAR(255),
-			MARKET_CAP VARCHAR(255),
-			PRICE_EARNINGS VARCHAR(255),
-			PRICE VARCHAR(255),
-			CHANGE VARCHAR(255),
-			VOLUME VARCHAR(255),
-			CREATED_DATE DATE NOT NULL,
-			MODIFIED_DATE DATE
-			);
-		</sql>
+        <createTable tableName="STOCKS">
+            <column name="ID" type="SERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="TICKER" type="VARCHAR(255)"/>
+            <column name="COMPANY" type="VARCHAR(255)"/>
+            <column name="SECTOR" type="VARCHAR(255)"/>
+            <column name="INDUSTRY" type="VARCHAR(255)"/>
+            <column name="COUNTRY" type="VARCHAR(255)"/>
+            <column name="MARKET_CAP" type="VARCHAR(255)"/>
+            <column name="PRICE_EARNINGS" type="VARCHAR(255)"/>
+            <column name="PRICE" type="VARCHAR(255)"/>
+            <column name="CHANGE" type="VARCHAR(255)"/>
+            <column name="VOLUME"  type="VARCHAR(255)"/>
+            <column name="CREATED_DATE" type="DATE" >
+                <constraints nullable="false"/>
+            </column>
+            <column name="MODIFIED_DATE" type="DATE"/>
+        </createTable>
+        
 		<rollback>
-			<sql>
-				DROP TABLE STOCKS;
-			</sql>
+			<dropTable tableName="STOCKS"/>
 		</rollback>
 	</changeSet>
-	
+		
 	<changeSet id="2" author="trentsteel777">
-		<sql>
-			INSERT INTO STOCKS (TICKER, COMPANY, SECTOR, INDUSTRY, COUNTRY, MARKET_CAP, PRICE_EARNINGS, PRICE, CHANGE, VOLUME, CREATED_DATE) 
-				VALUES ('TEST', 'Test Inc.', 'Technology', 'Consumer Electronics', 'United States', '2.5T', '30.45', '150.25', '+2.50', '10,000,000', CURRENT_DATE);
-		</sql>
-		<rollback>
-			<sql>
-				DELETE FROM STOCKS WHERE TICKER='TEST';
-			</sql>
-		</rollback>
+	    <insert tableName="STOCKS">
+	        <column name="ID" valueNumeric="1"/>
+	        <column name="TICKER" value="TESTT"/>
+	        <column name="COMPANY" value="Test Inc."/>
+	        <column name="SECTOR" value="Technology"/>
+	        <column name="INDUSTRY" value="Consumer Electronics"/>
+	        <column name="COUNTRY" value="United States"/>
+	        <column name="MARKET_CAP" value="2.5T"/>
+	        <column name="PRICE_EARNINGS" value="30.45"/>
+	        <column name="PRICE" value="150.25"/>
+	        <column name="CHANGE" value="+2.50"/>
+	        <column name="VOLUME" value="10,000,000"/>
+	        <column name="CREATED_DATE" valueDate="CURRENT_DATE"/>
+	    </insert>
+	    <rollback>
+	        <delete tableName="STOCKS">
+	            <where> TICKER='TESTT' </where>
+	        </delete>
+	    </rollback>
 	</changeSet>
-
 
 </databaseChangeLog>
