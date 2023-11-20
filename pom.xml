@@ -5,25 +5,29 @@
   <version>0.0.1-SNAPSHOT</version>
   <description>auto-investor-db migrations for bot</description>
 
-  <build>  
-       <pluginManagement>  
-           <plugins>  
-               <plugin>  
-                   <groupId>org.liquibase</groupId>  
-                   <artifactId>liquibase-maven-plugin</artifactId>  
-                   <version>4.24.0</version>  
-                   <configuration>  
-                       <propertyFile>liquibase.properties</propertyFile>  
-                   </configuration>  
-                   <dependencies>  
-                     <dependency>  
-                         <groupId>org.postgresql</groupId>  
-                         <artifactId>postgresql</artifactId>  
-                         <version>42.6.0</version>  
-                     </dependency>  
-                 </dependencies>  
-               </plugin>  
-           </plugins>  
-       </pluginManagement>  
-   </build>  
+	<properties>
+		<propertiesFile>liquibase.properties</propertiesFile>
+	</properties>
+
+	<build>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.liquibase</groupId>
+					<artifactId>liquibase-maven-plugin</artifactId>
+					<version>4.24.0</version>
+					<configuration>
+						<propertyFile>${propertiesFile}</propertyFile>
+					</configuration>
+					<dependencies>
+						<dependency>
+							<groupId>org.postgresql</groupId>
+							<artifactId>postgresql</artifactId>
+							<version>42.6.0</version>
+						</dependency>
+					</dependencies>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
 </project>

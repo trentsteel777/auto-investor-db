@@ -8,7 +8,9 @@ Running liquibase from command line:
 	mvn liquibase:update
 	mvn liquibase:rollback -Dliquibase.rollbackCount=2
 
-
+	mvn liquibase:update -DpropertiesFile=sim.liquibase.properties
+	mvn liquibase:rollback -DpropertiesFile=sim.liquibase.properties -Dliquibase.rollbackCount=2
+	
 Postgres:
 	https://www.baeldung.com/ops/postgresql-docker-setup
 	
@@ -18,6 +20,7 @@ Postgres:
 	docker rm postgresql
 	
 	docker run -itd -e POSTGRES_USER=sa -e POSTGRES_PASSWORD=password -p 5432:5432 -v C:\Users\trent\eclipse-workspace\auto-investor-db-data:/var/lib/postgresql/data --name postgresql postgres:16.0
+	docker run -itd -e POSTGRES_USER=sa -e POSTGRES_PASSWORD=password -p 5433:5432 -v C:\Users\trent\eclipse-workspace\auto-investor-simulator-db-data:/var/lib/postgresql/data --name postgresql-simulator postgres:16.0
 	
 	jdbc:postgresql://localhost:5432/sa
 	
