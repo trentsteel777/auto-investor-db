@@ -47,5 +47,12 @@
             <dropTable tableName="STOCK_PRICES"/>
         </rollback>
     </changeSet>
+    
+    <changeSet id="21" author="trentsteel777">
+    	<addUniqueConstraint tableName="STOCK_PRICES" constraintName="UC_SYMBOL_VALUATION_DATE" columnNames="SYMBOL, VALUATION_DATE"/>
+	    <rollback>
+	        <dropUniqueConstraint tableName="STOCK_PRICES" constraintName="UC_SYMBOL_VALUATION_DATE"/>
+	    </rollback>
+	</changeSet>
 	
 </databaseChangeLog>
