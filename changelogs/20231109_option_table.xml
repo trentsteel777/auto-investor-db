@@ -9,7 +9,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-	<changeSet id="3" author="trentsteel777" >
+	<changeSet id="option_table_create_table_1" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE OPTION_TYPES (
 				ID SERIAL PRIMARY KEY,
@@ -23,7 +23,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="4" author="trentsteel777" >
+	<changeSet id="option_table_alter_sequence_1" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			ALTER SEQUENCE option_types_id_seq MINVALUE 0 START 0 RESTART WITH 0;
 		</sql>
@@ -34,7 +34,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="5" author="trentsteel777">
+	<changeSet id="option_table_insert_1" author="trentsteel777">
 		<sql>
 			INSERT INTO OPTION_TYPES (NAME) VALUES ('CALL');
 			INSERT INTO OPTION_TYPES (NAME) VALUES ('PUT');
@@ -47,13 +47,34 @@
 		</rollback>
 	</changeSet>
 	
+	
+	<changeSet id="option_table_create_table_2" author="trentsteel777" >
+		<sql dbms="postgresql" splitStatements="false">
+			CREATE TABLE OPTION_CHAINS (
+				ID BIGSERIAL PRIMARY KEY,
+				SYMBOL VARCHAR(255) NOT NULL,
+			    CONTRACT_SIZE INT NOT NULL,
+			    CURRENCY VARCHAR(255) NOT NULL,
+			    EXPIRATION DATE NOT NULL,
+			    VALUATION_DATE DATE NOT NULL,
+			    CREATED_DATE DATE NOT NULL
+			);
+		</sql>
+		<rollback>
+			<sql>
+				DROP TABLE OPTION_CHAINS;
+			</sql>
+		</rollback>
+	</changeSet>
+	
 	<!-- https://stackoverflow.com/questions/15726535/which-datatype-should-be-used-for-currency -->
-	<changeSet id="6" author="trentsteel777" >
+	<changeSet id="option_table_create_table_3" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE OPTIONS (
 				ID BIGSERIAL PRIMARY KEY,
 				SYMBOL VARCHAR(255) NOT NULL,
 				OPTION_TYPE_ID INT NOT NULL,
+				OPTION_CHAIN_ID BIGSERIAL NOT NULL,
 			    CONTRACT_SYMBOL VARCHAR(255) NOT NULL,
 			    STRIKE NUMERIC(15,4) NOT NULL,
 			    CURRENCY VARCHAR(255) NOT NULL,
@@ -70,7 +91,8 @@
 			    IMPLIED_VOLATILITY NUMERIC(15,4) NOT NULL,
 			    IN_THE_MONEY BOOLEAN NOT NULL,
 			    CREATED_DATE DATE NOT NULL,
-			    FOREIGN KEY (OPTION_TYPE_ID) REFERENCES OPTION_TYPES(ID)
+			    FOREIGN KEY (OPTION_TYPE_ID) REFERENCES OPTION_TYPES(ID),
+			    FOREIGN KEY (OPTION_CHAIN_ID) REFERENCES OPTION_CHAINS(ID)
 			);
 		</sql>
 		<rollback>

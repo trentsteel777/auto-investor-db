@@ -9,7 +9,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-	<changeSet id="1" author="trentsteel777" >
+	<changeSet id="stocks_table_create_table_1" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE STOCKS (
 			ID SERIAL PRIMARY KEY,
@@ -34,7 +34,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="2" author="trentsteel777">
+	<changeSet id="stocks_table_insert_1" author="trentsteel777">
 		<sql>
 			INSERT INTO STOCKS (TICKER, COMPANY, SECTOR, INDUSTRY, COUNTRY, MARKET_CAP, PRICE_EARNINGS, PRICE, CHANGE, VOLUME, CREATED_DATE) 
 				VALUES ('TEST', 'Test Inc.', 'Technology', 'Consumer Electronics', 'United States', '2.5T', '30.45', '150.25', '+2.50', '10,000,000', CURRENT_DATE);

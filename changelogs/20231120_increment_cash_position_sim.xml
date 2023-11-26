@@ -9,7 +9,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-	<changeSet id="19" author="trentsteel777" context="sim">
+	<changeSet id="cash_position_sim_update_1" author="trentsteel777" context="sim">
 		    <update tableName="CASH_POSITIONS">
 		        <column name="amount" valueNumeric="100025"/>
 		        <where>account_number_id = 1</where>

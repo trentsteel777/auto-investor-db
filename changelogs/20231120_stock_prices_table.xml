@@ -8,9 +8,8 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
-
 	
-    <changeSet id="20" author="trentsteel777">
+    <changeSet id="stock_prices_table_create_table_1" author="trentsteel777">
         <createTable tableName="STOCK_PRICES">
             <column name="ID" type="SERIAL">
                 <constraints primaryKey="true" nullable="false"/>
@@ -48,7 +47,7 @@
         </rollback>
     </changeSet>
     
-    <changeSet id="21" author="trentsteel777">
+    <changeSet id="stock_prices_table_unique_constraint_1" author="trentsteel777">
     	<addUniqueConstraint tableName="STOCK_PRICES" constraintName="UC_SYMBOL_VALUATION_DATE" columnNames="SYMBOL, VALUATION_DATE"/>
 	    <rollback>
 	        <dropUniqueConstraint tableName="STOCK_PRICES" constraintName="UC_SYMBOL_VALUATION_DATE"/>

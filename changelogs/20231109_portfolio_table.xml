@@ -9,7 +9,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-	<changeSet id="7" author="trentsteel777" >
+	<changeSet id="portfolio_table_create_table_1" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE ACCOUNTS (
 			    ID SERIAL PRIMARY KEY,
@@ -25,7 +25,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="8" author="trentsteel777" >
+	<changeSet id="portfolio_table_create_table_2" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE POSITIONS (
 			    ID SERIAL PRIMARY KEY,
@@ -45,7 +45,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="9" author="trentsteel777" >
+	<changeSet id="portfolio_table_create_table_3" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE CASH_POSITIONS (
 			    ID SERIAL PRIMARY KEY,
@@ -64,7 +64,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="10" author="trentsteel777">
+	<changeSet id="portfolio_table_insert_1" author="trentsteel777">
 		<sql>
 			INSERT INTO ACCOUNTS (ID, ACCOUNT_NUMBER, CREATED_DATE, MODIFIED_DATE)
 				VALUES (1, '0000000001', CURRENT_DATE, NULL);
@@ -76,7 +76,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="11" author="trentsteel777">
+	<changeSet id="portfolio_table_insert_2" author="trentsteel777">
 		<sql>
 			INSERT INTO CASH_POSITIONS (ID, ACCOUNT_NUMBER_ID, CURRENCY, AMOUNT, CREATED_DATE, MODIFIED_DATE)
 				VALUES (1,1,'USD',100000.00,CURRENT_DATE,NULL);
@@ -88,7 +88,7 @@
 		</rollback>
 	</changeSet>
 
-	<changeSet id="12" author="trentsteel777">
+	<changeSet id="portfolio_table_insert_3" author="trentsteel777">
 		<sql>
 			INSERT INTO OPTIONS (SYMBOL, OPTION_TYPE_ID, CONTRACT_SYMBOL, STRIKE, CURRENCY, LAST_PRICE, CHANGE, PERCENT_CHANGE, VOLUME, OPEN_INTEREST, BID, ASK, CONTRACT_SIZE, EXPIRATION, LAST_TRADE_DATE, IMPLIED_VOLATILITY, IN_THE_MONEY, CREATED_DATE)
 				VALUES ('TEST', 0, 'AAPL202301C150', 150.0, 'USD', 10.5, 1.2, 12.0, 500, 1000, 10.2, 11.0, '100', '2023-01-15', '2023-11-06 14:30:00', 0.25, true, '2023-11-06');
@@ -100,7 +100,7 @@
 		</rollback>
 	</changeSet>
 
-	<changeSet id="13" author="trentsteel777">
+	<changeSet id="portfolio_table_insert_4" author="trentsteel777">
 		<sql>
 			INSERT INTO POSITIONS (ACCOUNT_NUMBER_ID, OPTION_ID, QUANTITY, CREATED_DATE, MODIFIED_DATE)
 				VALUES (1, (SELECT ID FROM OPTIONS WHERE CONTRACT_SYMBOL = 'AAPL202301C150'), 10, CURRENT_DATE, NULL);

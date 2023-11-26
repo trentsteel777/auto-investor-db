@@ -9,7 +9,7 @@
         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
         http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd">
 
-	<changeSet id="14" author="trentsteel777" >
+	<changeSet id="transaction_history_table_create_table_1" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE TRANSACTION_TYPES (
 			    ID SERIAL PRIMARY KEY,
@@ -23,7 +23,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="15" author="trentsteel777" >
+	<changeSet id="transaction_history_table_alter_sequence_1" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			ALTER SEQUENCE transaction_types_id_seq MINVALUE 0 START 0 RESTART WITH 0;
 		</sql>
@@ -34,7 +34,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="16" author="trentsteel777">
+	<changeSet id="transaction_history_table_insert_1" author="trentsteel777">
 		<sql>
 			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_SHORT_CALL');
 			INSERT INTO TRANSACTION_TYPES (NAME) VALUES ('OPEN_LONG_CALL');
@@ -56,7 +56,7 @@
 		</rollback>
 	</changeSet>
 
-	<changeSet id="17" author="trentsteel777" >
+	<changeSet id="transaction_history_table_create_table_2" author="trentsteel777" >
 		<sql dbms="postgresql" splitStatements="false">
 			CREATE TABLE TRANSACTION_HISTORY (
 			    ID SERIAL PRIMARY KEY,
@@ -78,7 +78,7 @@
 		</rollback>
 	</changeSet>
 	
-	<changeSet id="18" author="trentsteel777">
+	<changeSet id="transaction_history_table_insert_2" author="trentsteel777">
 		<sql>
 			INSERT INTO TRANSACTION_HISTORY (ACCOUNT_NUMBER_ID, TRANSACTION_DATETIME, TRANSACTION_TYPE_ID, AMOUNT, DESCRIPTION, CREATED_DATE)
 				VALUES (1, CURRENT_TIMESTAMP, 2, 100000.00, 'Initial deposit of $100,000', CURRENT_DATE);
