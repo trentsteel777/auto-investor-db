@@ -27,6 +27,9 @@ Postgres:
 
 
 sql:
+	see query planner in Squirrel
+		EXPLAIN SELECT * FROM OPTION_CHAINS WHERE SYMBOL = 'SPY' AND EXPIRATION = '2023-12-31' AND VALUATION_DATE = '2023-11-27';
+
 	SELECT pg_sequence_last_value('public.option_types_id_seq'); -- last value of sequence
 	select * from stocks;	
 	
