@@ -66,12 +66,12 @@
 	
 	<changeSet id="portfolio_table_insert_1" author="trentsteel777">
 		<sql>
-			INSERT INTO ACCOUNTS (ID, ACCOUNT_NUMBER, CREATED_DATE, MODIFIED_DATE)
-				VALUES (1, '0000000001', CURRENT_DATE, NULL);
+			INSERT INTO ACCOUNTS (ACCOUNT_NUMBER, CREATED_DATE, MODIFIED_DATE)
+				VALUES ('0000000001', CURRENT_DATE, NULL);
 		</sql>
 		<rollback>
 			<sql>
-				DELETE FROM ACCOUNTS WHERE ID='1';
+				DELETE FROM ACCOUNTS WHERE ACCOUNT_NUMBER='0000000001';
 			</sql>
 		</rollback>
 	</changeSet>
